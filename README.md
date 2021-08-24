@@ -1,6 +1,6 @@
-# DRAEX - Dump the Royal Spanish Academy's dictionary
+# draex - Dump the Royal Spanish Academy's dictionary
 
-DRAEX allows you to bypass the restrictions on the [ Royal Spanish Academy's online dictionary ](http://dle.rae.es/) 
+draex allows you to bypass the restrictions on the [ Royal Spanish Academy's online dictionary ](http://dle.rae.es/) 
 and download word definitions for offline usage.
 
 ## Getting started
@@ -131,3 +131,7 @@ Note how the definition object is splitted into 2 sections based on the definiti
 
 ## Legal notice
 This software is released under the terms expressed in the MIT License. Please, refer to the LICENSE file for more information.
+
+## :ng_man: DISCLAIMER :ng_man:
+
+This is an old, unmaintained project, please, consider that before blaming me for my bad code.
