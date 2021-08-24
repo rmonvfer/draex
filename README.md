@@ -1,81 +1,50 @@
-# DRAEX - Extractor del Diccionario de la Real Academia Española
+# DRAEX - Dump the Royal Spanish Academy's dictionary
 
-### DRAEX elimina las limitaciones de la página web del DRAE permitiendo la descarga en formato JSON todas las definiciones asociadas a una palabra (o a un conjunto de ellas) para su posterior consulta.
+DRAEX allows you to bypass the restrictions on the [ Royal Spanish Academy's online dictionary ](http://dle.rae.es/) 
+and download word definitions for offline usage.
 
-#### Página oficial del DRAE: [ Diccionario Online de la Real Academia Española ](http://dle.rae.es/)
+## Getting started
 
-# Instalación
+Clone this repository and cd into it:
 
-DRAEX necesita Python 3.6 o superior para funcionar correctamente. 
-
-## Instalación rápida
-
-Con diferencia, la manera más simple y rápida de instalar _DRAEX_ es utilizando _pip_:
-
-```shell
-pip3 install draex
+```bash
+git clone http://github.com/rmonvfer/draex && cd draex
 ```
 
-## Instalación manual
-
-Si eso no funciona, una solución podría ser instalar las dependencias de forma manual.
-
-Las siguientes librerías (**externas**) son necesarias para ejecutar _DRAEX_:
-
-1. WebBot
-2. BeautifulSoup
-
-Para instalarlas, simplemente utiliza pip3:
+Then install the required dependencies:
 
 ```shell
 pip3 install -r requirements.txt
 ```
 
-Si por algún motivo eso no funcionase, instálalas individualmente con:
+Now you are ready to go!
 
-```shell
-pip3 install webbot
-pip3 install BeautifulSoup
-```
+## Usage
 
-Clona este repositorio:
+Fire the script with `python3 draex.py` and follow the on-screen instructions.
 
-```bash
-git clone http://github.com/rmon-vfer/draex.git
-```
+## Why?
 
-Una vez clonado, muevete al directorio del repositorio:
+That's a good question actually.
 
-```bash
-cd ./draex/
-```
+Royal Spanish Academy's online dictionary implementation just sucks, it uses weird and outdated hacks to prevent bots from scrapping the word definitions but instead of adding a simple captcha-like mechanism they went with a broken javascript challenge and an even more broken rendering system that only prevents human usage.
 
-Para ejecutar el programa, lee la siguiente sección
+tl;dr, they throwing public money away instead of using simpler and cheaper systems, so this project was born to take advantage of those flaws and (maybe) help policy makers and other entities become aware of them.
 
-# Uso
+### Ok, but how?
 
-Por el momento, DRAEX solo cuenta con una interfaz interactiva, existen planes para extender la interfaz actual e implementar un modo _avanzado_, si quieres colaborar, haz un _fork_, haz los cambios que creas convenientes y despues haz un _pull request_ a este repositorio.
+Just use a headless Chrome/Firefox (selenium or whatever you like) to bypass the JS challenge and then beautifulsoup (or any other DOM/XML parser) to scrap the page content. Then add some logic to parse, structure and save the information and there you go!
 
-Para usar el modo interactivo de DRAEX, simplemente escribe:
+There are some minor details that I won't explain here because I dont't really like being sued but you'll hopefuly find a way around them.
 
-```shell
-python3 draex.py
-```
 
-# Implementación
+## Output
 
-La implementetación de DRAEX es bastante simple si atendemos al problema que la originó, la página web del [ Diccionario Online de la Real Academia Española ](http://dle.rae.es/), que impide mediante un _challenge_ (reto) de JavaScript acceder a la página si no es mediante un navegador con un motor capaz de resolverlo, (_por ejemplo, V8 de Google_)
+DRAEX outputs several files, let's review them one by one:
 
-En la mayoría de los casos es bastante tedioso hacerle ingeniería inversa a un JS Challenge, así que en lugar de hacer eso, decidí renderizar la página web con el WebDriver de Chromium en modo Headless para así resolverlo y obtener el código fuente de la página.
-Una vez obtenido es bastante sencillo emplear el HTML para obtener las definiciones y demás datos.
+### The debug log
 
-# Resultados
-
-## Logs
-
-El programa genera un archivo log que puede servir posteriormente para su depuración:
-
-#### _main.log_
+This ~mess~ script generates an output log file (the one you **MUST** use when reporting bugs) that looks like the following:
 
 ```
 [20190226-085731] | 
@@ -130,23 +99,18 @@ El programa genera un archivo log que puede servir posteriormente para su depura
 [20190226-085805] | Iterando sobre el link <a href="http://www.rae.es/recursos/diccionarios/nuevo-diccionario-historico" style="display: block;" target="_blank" title="Nuevo diccionario histórico del español">NDHE</a>
 [20190226-085805] | Iterando sobre el link <a href="http://archivo.rae.es" style="display: block;" target="_blank" title="Archivo de la Real Academia Española">Archivo</a>
 [20190226-085805] | Iterando sobre el link <a href="https://letras.rae.es" style="display: block;" target="_blank" title="Letras de la Real Academia Española">Tienda de la RAE</a>
-
 ```
 
-## Definiciones
+(And yeah I know it's in spanish bc I am lazy and translation takes time)
 
-Las definiciones de almacenan por duplicado, una copia se almacena en un archivo JSON ```general.json``` y otra copia en un archivo cuyo nombre es la palabra definida.
+### The definitions
 
-El archivo de definición individual, está estructurado en dos secciones, de acuerdo al uso que recibe cada significado de la palabra:
+Definitions are saved twice:
+ - One goes to a JSON file named `general.json`, which contains all scraped definitions.
+ - The other one goes to another JSON with the same name as the defined word.
 
-1. Uso Normal (_denominado_ ```[UNORM]``` en el log)
-2. Uso Especial (_denominado_ ```[USPEC]``` en el log)
 
-Las diferentes definiciones presentan el mismo orden que en la página web original.
-
-Un ejemplo de ```<palabra>.json``` es el siguiente
-
-#### _diccionario.json_
+For example, if you defined the word _"diccionario"_:
 
 ```JSON
 {
@@ -163,21 +127,7 @@ Un ejemplo de ```<palabra>.json``` es el siguiente
 }
 ```
 
-# Notas
+Note how the definition object is splitted into 2 sections based on the definition's usage.
 
-## Aviso **legal** (muy importante)
-
-Ni yo ni ninguna de las personas que han colaborado conmigo en el desarrollo de esta herramienta deseamos dañar en modo alguno a la _Real Academia Española_, el presente software es liberado bajo la licencia MIT, y su única finalidad es servir de ejemplo para el aprendizaje de las tecnologías y la seguridad web.
-
-> Si utilizas este programa asumes las condiciones de la licencia MIT y estás de acuerdo en que **no lo utilizarás para obtener ningún beneficio** más allá del puro conocimiento.
-
-## Aviso de desarrollo
-
-**Este software está en desarrollo**, lo que implica que las cosas pueden cambiar de un día para otro sin previo aviso, pueden dejar de funcionar o directamente desaparecer entre una versión y otra.
-
-# Colaboración
-
-Si quieres colaborar, **haz un fork** y completa alguno de los (muchos) ```TODO```'s que pueblan el código, intenta solucionar algún bug o implementa alguna característica interesante.
-
-Una vez que tengas la nueva característica/bug..., haz una _pull request_ a la _main branch_ de este repo ~~(quizá estaría bien abrir una _development branch_)~~.
-
+## Legal notice
+This software is released under the terms expressed in the MIT License. Please, refer to the LICENSE file for more information.
