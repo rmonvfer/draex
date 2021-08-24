@@ -40,11 +40,11 @@ There are some minor details that I won't explain here because I dont't really l
 
 ## Output
 
-DRAEX outputs several files, let's review them one by one:
+DRAEX outputs several files, let's review them one by one
 
 ### The debug log
 
-This ~mess~ script generates an output log file (the one you **MUST** use when reporting bugs) that looks like the following:
+This ~~mess~~ script generates an output log file (the one you **MUST** use when reporting bugs) that looks like the following:
 
 ```
 [20190226-085731] | 
@@ -112,17 +112,17 @@ Definitions are saved twice:
 
 For example, if you defined the word _"diccionario"_:
 
-```JSON
+```javascript
 {
-    "usoNormal" : {
-        1 : "Definicion1",
-        2 : "Definición2",
-        3 : "Definición3
+    'usoNormal' : {
+        1 : 'Definicion1',
+        2 : 'Definición2',
+        3 : 'Definición3'
     },
-    "usoEspecial" : {
-        1 : "Definicion1",
-        2 : "Definición2",
-        3 : "Definición3
+    'usoEspecial' : {
+        1 : 'Definicion1',
+        2 : 'Definición2',
+        3 : 'Definición3'
     }
 }
 ```
